@@ -1,0 +1,91 @@
+<template>
+  <div class="container">
+    <div class="clock"></div>
+  </div>
+  <style>
+    .container {
+      position: relative;
+      width: 400px;
+      height: 100px;
+      border: 2px black solid;
+      border-radius: 2px;
+      font-family: arial;
+    }
+
+    .container.green {
+      background-color: green;
+    }
+
+    .container.blue {
+      background-color: blue;
+    }
+
+    .container.red {
+      background-color: red;
+    }
+
+    .container .clock {
+      font-size: 76px;
+      position: relative;
+      top: 50%;
+      line-height: 100px;
+      text-align: center;
+      transform: translateY(-50%);
+    }
+
+
+  </style>
+</template>
+
+<script>
+  (function() {
+    class MyClock extends HTMLElement {
+       constructor() {
+         super();
+         this.shadow = this.attachShadow({ mode: 'open' });
+       }
+      static get observedAttributes() { return ["theme"]; }
+
+      connectedCallback() {
+        let importDocument = document.currentScript.ownerDocument;
+        let template = importDocument.querySelector('template')
+            .content.cloneNode(true);
+        this.shadow.appendChild(template);
+        this.$container = this.shadow.querySelector('.container');
+        this.$clock = this.shadow.querySelector('.clock');
+        this.updateTheme(this.getAttribute('theme'));
+        this.runClock();
+      }
+
+      updateTheme(newVal) {
+        if(this.$container) {
+          console.log("updateTheme", newVal);
+          console.log("clock", this.$container);
+          this.$container.className = "container " + newVal;
+        }
+      }
+
+      setClock() {
+        let date = new Date();
+        this.$clock.innerHTML = date.toLocaleTimeString();
+      }
+
+      runClock() {
+        setInterval(()=> {
+          this.setClock();
+        }, 1000)
+      }
+
+      attributeChangedCallback(attrName, oldVal, newVal)  {
+        console.log("attributeChangedCallback");
+        switch (attrName) {
+          case "theme":
+            this.updateTheme(newVal);
+            break;
+        }
+      }
+    }
+    console.log("test");
+    window.customElements.define('my-clock', MyClock);
+  }());
+</script>

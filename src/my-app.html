@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
+<link rel="import" href="my-clock.html">
 
 <link rel="lazy-import" href="my-view1.html">
 <link rel="lazy-import" href="my-view2.html">
@@ -67,6 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: bold;
       }
     </style>
+    <my-clock theme="red"></my-clock>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -85,6 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="view3" href="view3">View Three</a>
         </iron-selector>
       </app-drawer>
+
 
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
