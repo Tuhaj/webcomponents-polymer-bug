@@ -38,19 +38,21 @@
 </template>
 
 <script>
-  (function() {
+    const thatDoc = document;
+    const thisDoc = (thatDoc._currentScript || thatDoc.currentScript).ownerDocument;
+    const template = thisDoc.querySelector( 'template' ).content;
+
     class MyClock extends HTMLElement {
        constructor() {
          super();
          this.shadow = this.attachShadow({ mode: 'open' });
        }
       static get observedAttributes() { return ["theme"]; }
+      static get is() { return 'my-clock'; }
 
       connectedCallback() {
-        let importDocument = document.currentScript.ownerDocument;
-        let template = importDocument.querySelector('template')
-            .content.cloneNode(true);
-        this.shadow.appendChild(template);
+        let clone = thatDoc.importNode( template, true );
+        this.shadow.appendChild(clone);
         this.$container = this.shadow.querySelector('.container');
         this.$clock = this.shadow.querySelector('.clock');
         this.updateTheme(this.getAttribute('theme'));
@@ -77,7 +79,7 @@
       }
 
       attributeChangedCallback(attrName, oldVal, newVal)  {
-        console.log("attributeChangedCallback");
+        console.log("attributeChangedCallback", oldVal, newVal, attrName);
         switch (attrName) {
           case "theme":
             this.updateTheme(newVal);
@@ -86,6 +88,5 @@
       }
     }
     console.log("test");
-    window.customElements.define('my-clock', MyClock);
-  }());
+    window.customElements.define(MyClock.is, MyClock);
 </script>
